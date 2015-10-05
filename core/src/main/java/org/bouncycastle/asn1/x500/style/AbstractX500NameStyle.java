@@ -157,7 +157,7 @@ public abstract class AbstractX500NameStyle
         return true;
     }
 
-    private boolean foundMatch(boolean reverse, RDN rdn, RDN[] possRDNs)
+    protected boolean foundMatch(boolean reverse, RDN rdn, RDN[] possRDNs)
     {
         if (reverse)
         {

@@ -21,8 +21,8 @@ import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
 public class SignerInfo
     extends ASN1Object
 {
-    private ASN1Integer              version;
-    private IssuerAndSerialNumber   issuerAndSerialNumber;
+    private ASN1Integer             version;
+    private SignerIdentifier        signerIdentifier;
     private AlgorithmIdentifier     digAlgorithm;
     private ASN1Set                 authenticatedAttributes;
     private AlgorithmIdentifier     digEncryptionAlgorithm;
@@ -45,8 +45,8 @@ public class SignerInfo
     }
 
     public SignerInfo(
-        ASN1Integer              version,
-        IssuerAndSerialNumber   issuerAndSerialNumber,
+        ASN1Integer             version,
+        SignerIdentifier        signerIdentifier,
         AlgorithmIdentifier     digAlgorithm,
         ASN1Set                 authenticatedAttributes,
         AlgorithmIdentifier     digEncryptionAlgorithm,
@@ -54,7 +54,7 @@ public class SignerInfo
         ASN1Set                 unauthenticatedAttributes)
     {
         this.version = version;
-        this.issuerAndSerialNumber = issuerAndSerialNumber;
+        this.signerIdentifier = signerIdentifier;
         this.digAlgorithm = digAlgorithm;
         this.authenticatedAttributes = authenticatedAttributes;
         this.digEncryptionAlgorithm = digEncryptionAlgorithm;
@@ -68,7 +68,7 @@ public class SignerInfo
         Enumeration     e = seq.getObjects();
 
         version = (ASN1Integer)e.nextElement();
-        issuerAndSerialNumber = IssuerAndSerialNumber.getInstance(e.nextElement());
+        signerIdentifier = SignerIdentifier.getInstance(e.nextElement());
         digAlgorithm = AlgorithmIdentifier.getInstance(e.nextElement());
 
         Object obj = e.nextElement();
@@ -102,9 +102,9 @@ public class SignerInfo
         return version;
     }
 
-    public IssuerAndSerialNumber getIssuerAndSerialNumber()
+    public SignerIdentifier getSignerIdentifier()
     {
-        return issuerAndSerialNumber;
+        return signerIdentifier;
     }
 
     public ASN1Set getAuthenticatedAttributes()
@@ -137,7 +137,7 @@ public class SignerInfo
      * <pre>
      *  SignerInfo ::= SEQUENCE {
      *      version Version,
-     *      issuerAndSerialNumber IssuerAndSerialNumber,
+     *      signerIdentifier SignerIdentifier,
      *      digestAlgorithm DigestAlgorithmIdentifier,
      *      authenticatedAttributes [0] IMPLICIT Attributes OPTIONAL,
      *      digestEncryptionAlgorithm DigestEncryptionAlgorithmIdentifier,
@@ -157,7 +157,7 @@ public class SignerInfo
         ASN1EncodableVector v = new ASN1EncodableVector();
 
         v.add(version);
-        v.add(issuerAndSerialNumber);
+        v.add(signerIdentifier);
         v.add(digAlgorithm);
 
         if (authenticatedAttributes != null)

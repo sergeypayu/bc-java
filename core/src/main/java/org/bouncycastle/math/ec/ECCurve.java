@@ -919,7 +919,7 @@ public abstract class ECCurve
             this.infinity = new ECPoint.F2m(this, null, null);
             this.a = fromBigInteger(a);
             this.b = fromBigInteger(b);
-            this.coord = F2M_DEFAULT_COORDS;
+            //this.coord = F2M_DEFAULT_COORDS;
         }
 
         protected F2m(int m, int k1, int k2, int k3, ECFieldElement a, ECFieldElement b, BigInteger order, BigInteger cofactor)
@@ -936,7 +936,7 @@ public abstract class ECCurve
             this.infinity = new ECPoint.F2m(this, null, null);
             this.a = a;
             this.b = b;
-            this.coord = F2M_DEFAULT_COORDS;
+            //this.coord = F2M_DEFAULT_COORDS;
         }
 
         protected ECCurve cloneCurve()

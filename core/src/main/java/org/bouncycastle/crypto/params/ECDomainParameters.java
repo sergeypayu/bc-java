@@ -71,4 +71,14 @@ public class ECDomainParameters
     {
         return Arrays.clone(seed);
     }
+    
+    public boolean equals(ECDomainParameters other)
+    {
+    	return this == other
+            || (null != other 
+                && curve.equals(other.curve)
+                && G.equals(other.G)
+                && n.equals(other.n)
+                && h.equals(other.h));
+    }
 }

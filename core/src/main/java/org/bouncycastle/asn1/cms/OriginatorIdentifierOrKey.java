@@ -1,10 +1,9 @@
 package org.bouncycastle.asn1.cms;
 
 import org.bouncycastle.asn1.ASN1Choice;
-import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1Object;
-import org.bouncycastle.asn1.ASN1OctetString;
 import org.bouncycastle.asn1.ASN1Primitive;
+import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.ASN1TaggedObject;
 import org.bouncycastle.asn1.DERTaggedObject;
 import org.bouncycastle.asn1.x509.SubjectKeyIdentifier;
@@ -26,43 +25,9 @@ public class OriginatorIdentifierOrKey
     extends ASN1Object
     implements ASN1Choice
 {
-    private ASN1Encodable id;
-
-    public OriginatorIdentifierOrKey(
-        IssuerAndSerialNumber id)
-    {
-        this.id = id;
-    }
-
-    /**
-     * @deprecated use version taking a SubjectKeyIdentifier
-     */
-    public OriginatorIdentifierOrKey(
-        ASN1OctetString id)
-    {
-        this(new SubjectKeyIdentifier(id.getOctets()));
-    }
-
-    public OriginatorIdentifierOrKey(
-        SubjectKeyIdentifier id)
-    {
-        this.id = new DERTaggedObject(false, 0, id);
-    }
-
-    public OriginatorIdentifierOrKey(
-        OriginatorPublicKey id)
-    {
-        this.id = new DERTaggedObject(false, 1, id);
-    }
-
-    /**
-     * @deprecated use more specific version
-     */
-    public OriginatorIdentifierOrKey(
-        ASN1Primitive id)
-    {
-        this.id = id;
-    }
+	private IssuerAndSerialNumber issuerSerial;
+	private SubjectKeyIdentifier subjectKeyId;
+	private OriginatorPublicKey originatorPublicKey;
 
     /**
      * Return an OriginatorIdentifierOrKey object from a tagged object.
@@ -96,77 +61,91 @@ public class OriginatorIdentifierOrKey
      * <li> {@link IssuerAndSerialNumber} object
      * <li> {@link SubjectKeyIdentifier} object
      * <li> {@link OriginatorPublicKey} object
-     * <li> {@link org.bouncycastle.asn1.ASN1TaggedObject#getInstance(java.lang.Object) ASN1TaggedObject} input formats with IssuerAndSerialNumber structure inside
+     * <li> {@link org.bouncycastle.asn1.ASN1Sequence#getInstance(java.lang.Object) ASN1Sequence} input formats with IssuerAndSerialNumber structure inside
+     * <li> {@link org.bouncycastle.asn1.ASN1TaggedObject#getInstance(java.lang.Object) ASN1TaggedObject} with tag value 0: a SubjectKeyIdentifier data structure, 1: OriginatorPublicKey
      * </ul>
      *
-     * @param o the object we want converted.
+     * @param obj the object we want converted.
      * @exception IllegalArgumentException if the object cannot be converted.
      */
     public static OriginatorIdentifierOrKey getInstance(
-        Object o)
+        Object obj)
     {
-        if (o == null || o instanceof OriginatorIdentifierOrKey)
+        if (obj == null || obj instanceof OriginatorIdentifierOrKey)
         {
-            return (OriginatorIdentifierOrKey)o;
+            return (OriginatorIdentifierOrKey)obj;
         }
 
-        if (o instanceof IssuerAndSerialNumber)
+        if (obj instanceof IssuerAndSerialNumber)
         {
-            return new OriginatorIdentifierOrKey((IssuerAndSerialNumber)o);
+            return new OriginatorIdentifierOrKey((IssuerAndSerialNumber)obj);
         }
 
-        if (o instanceof SubjectKeyIdentifier)
+        if (obj instanceof SubjectKeyIdentifier)
         {
-            return new OriginatorIdentifierOrKey((SubjectKeyIdentifier)o);
+            return new OriginatorIdentifierOrKey((SubjectKeyIdentifier)obj);
         }
 
-        if (o instanceof OriginatorPublicKey)
+        if (obj instanceof OriginatorPublicKey)
         {
-            return new OriginatorIdentifierOrKey((OriginatorPublicKey)o);
+            return new OriginatorIdentifierOrKey((OriginatorPublicKey)obj);
         }
 
-        if (o instanceof ASN1TaggedObject)
+        if (obj instanceof ASN1Sequence)
         {
-            // TODO Add validation
-            return new OriginatorIdentifierOrKey((ASN1TaggedObject)o);
+        	return new OriginatorIdentifierOrKey(IssuerAndSerialNumber.getInstance(obj));
         }
-
-        throw new IllegalArgumentException("Invalid OriginatorIdentifierOrKey: " + o.getClass().getName());
+        
+        if (obj instanceof ASN1TaggedObject && ((ASN1TaggedObject)obj).getTagNo() == 0)
+        {
+            return new OriginatorIdentifierOrKey(SubjectKeyIdentifier.getInstance((ASN1TaggedObject)obj, false));
+        }
+        
+        if (obj instanceof ASN1TaggedObject && ((ASN1TaggedObject)obj).getTagNo() == 1)
+        {
+            return new OriginatorIdentifierOrKey(OriginatorPublicKey.getInstance((ASN1TaggedObject)obj, false));
+        }
+        
+        throw new IllegalArgumentException("Invalid OriginatorIdentifierOrKey: " + obj.getClass().getName());
     }
 
-    public ASN1Encodable getId()
+    public OriginatorIdentifierOrKey(
+            IssuerAndSerialNumber issuerSerial)
     {
-        return id;
+        this.issuerSerial = issuerSerial;
+        this.subjectKeyId = null;
+        this.originatorPublicKey = null;
     }
 
+    public OriginatorIdentifierOrKey(
+        SubjectKeyIdentifier subjectKeyId)
+    {
+    	this.issuerSerial = null;
+        this.subjectKeyId = subjectKeyId;
+        this.originatorPublicKey = null;
+    }
+
+    public OriginatorIdentifierOrKey(
+        OriginatorPublicKey originatorPublicKey)
+    {
+    	this.issuerSerial = null;
+        this.subjectKeyId = null;
+        this.originatorPublicKey = originatorPublicKey;
+    }
+        
     public IssuerAndSerialNumber getIssuerAndSerialNumber()
     {
-        if (id instanceof IssuerAndSerialNumber)
-        {
-            return (IssuerAndSerialNumber)id;
-        }
-
-        return null;
+        return issuerSerial;
     }
 
     public SubjectKeyIdentifier getSubjectKeyIdentifier()
     {
-        if (id instanceof ASN1TaggedObject && ((ASN1TaggedObject)id).getTagNo() == 0)
-        {
-            return SubjectKeyIdentifier.getInstance((ASN1TaggedObject)id, false);
-        }
-
-        return null;
+        return subjectKeyId;
     }
 
     public OriginatorPublicKey getOriginatorKey()
     {
-        if (id instanceof ASN1TaggedObject && ((ASN1TaggedObject)id).getTagNo() == 1)
-        {
-            return OriginatorPublicKey.getInstance((ASN1TaggedObject)id, false);
-        }
-
-        return null;
+        return originatorPublicKey;
     }
 
     /**
@@ -174,6 +153,17 @@ public class OriginatorIdentifierOrKey
      */
     public ASN1Primitive toASN1Primitive()
     {
-        return id.toASN1Primitive();
+    	if (issuerSerial != null)
+        {
+            return issuerSerial.toASN1Primitive();
+        } 
+    	else if (subjectKeyId != null) 
+    	{
+    		return new DERTaggedObject(false, 0, subjectKeyId);
+        } 
+    	else 
+    	{
+    		return new DERTaggedObject(false, 1, originatorPublicKey);
+        }
     }
 }

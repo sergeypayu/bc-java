@@ -70,18 +70,6 @@ public abstract class DSTU4145PointEncoder
 
     public static byte[] encodePoint(ECPoint Q)
     {
-        /*if (!Q.isCompressed())
-              Q=new ECPoint.F2m(Q.getCurve(),Q.getX(),Q.getY(),true);
-
-          byte[] bytes=Q.getEncoded();
-
-          if (bytes[0]==0x02)
-              bytes[bytes.length-1]&=0xFE;
-          else if (bytes[0]==0x02)
-              bytes[bytes.length-1]|=0x01;
-
-          return Arrays.copyOfRange(bytes, 1, bytes.length);*/
-
         Q = Q.normalize();
 
         ECFieldElement x = Q.getAffineXCoord();
@@ -106,17 +94,6 @@ public abstract class DSTU4145PointEncoder
 
     public static ECPoint decodePoint(ECCurve curve, byte[] bytes)
     {
-        /*byte[] bp_enc=new byte[bytes.length+1];
-          if (0==(bytes[bytes.length-1]&0x1))
-              bp_enc[0]=0x02;
-          else
-              bp_enc[0]=0x03;
-          System.arraycopy(bytes, 0, bp_enc, 1, bytes.length);
-          if (!trace(curve.fromBigInteger(new BigInteger(1, bytes))).equals(curve.getA().toBigInteger()))
-              bp_enc[bp_enc.length-1]^=0x01;
-
-          return curve.decodePoint(bp_enc);*/
-
         ECFieldElement k = curve.fromBigInteger(BigInteger.valueOf(bytes[bytes.length - 1] & 0x1));
 
         ECFieldElement xp = curve.fromBigInteger(new BigInteger(1, bytes));

@@ -204,6 +204,10 @@ public class GOFBBlockCipher
             }
             N3 += C2;
             N4 += C1;
+            // N4 should be added with mod 2^32 - 1
+            if (N4 >= 0 && N4 < C1) {
+            	N4 += 1;
+            }
             intTobytes(N3, ofbV, 0);
             intTobytes(N4, ofbV, 4);
 

@@ -106,7 +106,9 @@ public class PrivateKeyInfo
     public ASN1Encodable parsePrivateKey()
         throws IOException
     {
-        return ASN1Primitive.fromByteArray(privKey.getOctets());
+    	// FIXME
+    	return ASN1Primitive.fromByteArray(privKey.getEncoded());
+    	//return ASN1Primitive.fromByteArray(privKey.getOctets());
     }
 
     /**

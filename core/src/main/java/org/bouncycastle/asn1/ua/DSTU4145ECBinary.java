@@ -21,23 +21,26 @@ import org.bouncycastle.util.Arrays;
 public class DSTU4145ECBinary
     extends ASN1Object
 {
-    BigInteger version = BigInteger.valueOf(0);
+    private BigInteger version = BigInteger.valueOf(0);
 
-    DSTU4145BinaryField f;
-    ASN1Integer a;
-    ASN1OctetString b;
-    ASN1Integer n;
-    ASN1OctetString bp;
-
+    private DSTU4145BinaryField f;
+    private ASN1Integer a;
+    private ASN1OctetString b;
+    private ASN1Integer n;
+    private ASN1OctetString bp;
+    
     public DSTU4145ECBinary(ECDomainParameters params)
+    {
+    	this(params, false);
+    }
+
+    public DSTU4145ECBinary(ECDomainParameters params, boolean littleEndian)
     {
         ECCurve curve = params.getCurve();
         if (!ECAlgorithms.isF2mCurve(curve))
         {
             throw new IllegalArgumentException("only binary domain is possible");
         }
-
-        // We always use big-endian in parameter encoding
 
         PolynomialExtensionField field = (PolynomialExtensionField)curve.getField();
         int[] exponents = field.getMinimalPolynomial().getExponentsPresent();
@@ -55,9 +58,11 @@ public class DSTU4145ECBinary
         }
 
         a = new ASN1Integer(curve.getA().toBigInteger());
-        b = new DEROctetString(curve.getB().getEncoded());
+        byte[] bBytes = curve.getB().getEncoded();
+        b = new DEROctetString(littleEndian ? Arrays.reverse(bBytes) : bBytes);
         n = new ASN1Integer(params.getN());
-        bp = new DEROctetString(DSTU4145PointEncoder.encodePoint(params.getG()));
+        byte[] gBytes = DSTU4145PointEncoder.encodePoint(params.getG());
+        bp = new DEROctetString(littleEndian ? Arrays.reverse(gBytes) : gBytes);
     }
 
     private DSTU4145ECBinary(ASN1Sequence seq)
