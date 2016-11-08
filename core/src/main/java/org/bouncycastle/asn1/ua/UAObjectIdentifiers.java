@@ -56,6 +56,8 @@ public interface UAObjectIdentifiers
 	
     /** Gost34311 1.2.804.2.1.1.1.1.2.1 */
     static final ASN1ObjectIdentifier gost34311 = UaOid.branch("1.2.1");
+    /** HMac with Gost34311 1.2.804.2.1.1.1.1.1.2 */
+    static final ASN1ObjectIdentifier hmacGost34311 = UaOid.branch("1.1.2");
     
     /** Subject Directory Attribute: DRFO 1.2.804.2.1.1.1.11.1.4.1.1 */
     static final ASN1ObjectIdentifier drfo = UaOid.branch("11.1.4.1.1");
