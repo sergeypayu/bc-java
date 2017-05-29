@@ -77,7 +77,7 @@ public class PrivateKeyInfo
         Enumeration e = seq.getObjects();
 
         BigInteger  version = ((ASN1Integer)e.nextElement()).getValue();
-        if (version.intValue() != 0)
+        if (version.intValue() != 0 && version.intValue() != 1)
         {
             throw new IllegalArgumentException("wrong version for private key info");
         }
