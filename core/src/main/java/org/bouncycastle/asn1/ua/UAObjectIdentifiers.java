@@ -18,7 +18,7 @@ public interface UAObjectIdentifiers
 
     /** DSTU4145 Little Endian presentation.  OID: 1.2.804.2.1.1.1.1.3.1.1 */
     static final ASN1ObjectIdentifier dstu4145le = UaOid.branch("1.3.1.1");
-    /** DSTU4145 Big Endian presentation.  OID: 1.2.804.2.1.1.1.1.3.1.1.1 */
+    /** DSTU4145 Big Endian presentation.  OID: 1.2.804.2.1.1.1.1.3.1.1.1.1 */
     static final ASN1ObjectIdentifier dstu4145be = UaOid.branch("1.3.1.1.1.1");
     
     /** Prikaz 1236 Named Curves PB.  OID: 1.2.804.2.1.1.1.1.3.1.1.2.X */
