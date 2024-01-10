@@ -62,7 +62,7 @@ public class PrivateKeyInfo
         ASN1Set             attributes)
         throws IOException
     {
-        this.privKey = new DEROctetString(privateKey.toASN1Primitive().getEncoded(ASN1Encoding.DER));
+        this.privKey = privateKey instanceof DEROctetString ? ((DEROctetString)privateKey) : new DEROctetString(privateKey.toASN1Primitive().getEncoded(ASN1Encoding.DER));
         this.algId = algId;
         this.attributes = attributes;
     }
@@ -106,24 +106,12 @@ public class PrivateKeyInfo
     public ASN1Encodable parsePrivateKey()
         throws IOException
     {
-    	// FIXME
-    	return ASN1Primitive.fromByteArray(privKey.getEncoded());
-    	//return ASN1Primitive.fromByteArray(privKey.getOctets());
+    	return ASN1Primitive.fromByteArray(privKey.getOctets());
     }
 
-    /**
-          * @deprecated use parsePrivateKey()
-     */
     public ASN1Primitive getPrivateKey()
     {
-        try
-        {
-            return parsePrivateKey().toASN1Primitive();
-        }
-        catch (IOException e)
-        {
-            throw new IllegalStateException("unable to parse private key");
-        }
+        return this.privKey;
     }
     
     public ASN1Set getAttributes()

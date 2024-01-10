@@ -31,11 +31,6 @@ public class DSTU4145ECBinary
     
     public DSTU4145ECBinary(ECDomainParameters params)
     {
-    	this(params, false);
-    }
-
-    public DSTU4145ECBinary(ECDomainParameters params, boolean littleEndian)
-    {
         ECCurve curve = params.getCurve();
         if (!ECAlgorithms.isF2mCurve(curve))
         {
@@ -59,10 +54,10 @@ public class DSTU4145ECBinary
 
         a = new ASN1Integer(curve.getA().toBigInteger());
         byte[] bBytes = curve.getB().getEncoded();
-        b = new DEROctetString(littleEndian ? Arrays.reverse(bBytes) : bBytes);
+        b = new DEROctetString(bBytes);
         n = new ASN1Integer(params.getN());
         byte[] gBytes = DSTU4145PointEncoder.encodePoint(params.getG());
-        bp = new DEROctetString(littleEndian ? Arrays.reverse(gBytes) : gBytes);
+        bp = new DEROctetString(gBytes);
     }
 
     private DSTU4145ECBinary(ASN1Sequence seq)
