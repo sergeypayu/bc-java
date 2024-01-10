@@ -14,18 +14,41 @@ public class DSTU4145Params
     private ASN1ObjectIdentifier namedCurve;
     private DSTU4145ECBinary ecbinary;
     private ASN1OctetString dke;
+    private ASN1OctetString dke2;
+
+    public DSTU4145Params(ASN1ObjectIdentifier namedCurve)
+    {
+        this(namedCurve, null, null);
+    }
 
     public DSTU4145Params(ASN1ObjectIdentifier namedCurve, ASN1OctetString dke)
     {
+        this(namedCurve, dke, null);
+    }
+
+    public DSTU4145Params(ASN1ObjectIdentifier namedCurve, ASN1OctetString dke, ASN1OctetString dke2)
+    {
         this.namedCurve = namedCurve;
         this.dke = dke;
+        this.dke2 = dke2;
         this.ecbinary = null;
+    }
+
+    public DSTU4145Params(DSTU4145ECBinary ecbinary)
+    {
+        this(ecbinary, null, null);
     }
 
     public DSTU4145Params(DSTU4145ECBinary ecbinary, ASN1OctetString dke)
     {
+        this(ecbinary, dke, null);
+    }
+
+    public DSTU4145Params(DSTU4145ECBinary ecbinary, ASN1OctetString dke, ASN1OctetString dke2)
+    {
         this.ecbinary = ecbinary;
         this.dke = dke;
+        this.dke2 = dke2;
         this.namedCurve = null;
     }
 
@@ -42,6 +65,11 @@ public class DSTU4145Params
     public byte[] getDKE()
     {
         return dke == null ? null : dke.getOctets();
+    }
+
+    public byte[] getDKE2()
+    {
+        return dke2 == null ? null : dke2.getOctets();
     }
 
     public ASN1ObjectIdentifier getNamedCurve()
@@ -61,19 +89,23 @@ public class DSTU4145Params
             ASN1Sequence seq = ASN1Sequence.getInstance(obj);
             
             ASN1OctetString dke = null;
+            ASN1OctetString dke2 = null;
             if (seq.size() > 1) {
             	dke = ASN1OctetString.getInstance(seq.getObjectAt(1));
+            }
+            if (seq.size() > 2) {
+                dke2 = ASN1OctetString.getInstance(seq.getObjectAt(2));
             }
             
             DSTU4145Params params;
             
             if (seq.getObjectAt(0) instanceof ASN1ObjectIdentifier)
             {
-            	params = new DSTU4145Params(ASN1ObjectIdentifier.getInstance(seq.getObjectAt(0)), dke);
+            	params = new DSTU4145Params(ASN1ObjectIdentifier.getInstance(seq.getObjectAt(0)), dke, dke2);
             }
             else
             {
-            	params = new DSTU4145Params(DSTU4145ECBinary.getInstance(seq.getObjectAt(0)), dke);
+            	params = new DSTU4145Params(DSTU4145ECBinary.getInstance(seq.getObjectAt(0)), dke, dke2);
             }
 
             return params;
@@ -89,7 +121,8 @@ public class DSTU4145Params
      * 			ecbinary ECBinary,
      * 			namedCurve OBJECT IDENTIFIER
      * 		},
-     * 		dke OCTET STRING OPTIONAL
+     * 		dke  OCTET STRING OPTIONAL
+     * 		dke2 OCTET STRING OPTIONAL
      * 	}
      */
     public ASN1Primitive toASN1Primitive()
@@ -108,6 +141,11 @@ public class DSTU4145Params
         if (dke != null)
         {
             v.add(dke);
+        }
+
+        if (dke2 != null)
+        {
+            v.add(dke2);
         }
 
         return new DERSequence(v);

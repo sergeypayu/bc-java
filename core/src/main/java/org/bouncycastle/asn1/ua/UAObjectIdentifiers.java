@@ -66,7 +66,9 @@ public interface UAObjectIdentifiers
     
     /** Extended Key Usage: stamp 1.2.804.2.1.1.1.3.9 */
 	static final ASN1ObjectIdentifier stampUsage = UaOid.branch("3.9");
-	
-	/** Qualified Mark 1.2.804.2.1.1.1.2.2 */
+
+    /** QcCompliance 1.2.804.2.1.1.1.2.1 */
+    static final ASN1ObjectIdentifier qcCompliance = UaOid.branch("2.1");
+    /** Qualified Mark 1.2.804.2.1.1.1.2.2 */
 	static final ASN1ObjectIdentifier certQualified = UaOid.branch("2.2");
 }

@@ -28,6 +28,15 @@ public class DSTU4145ECBinary
     private ASN1OctetString b;
     private ASN1Integer n;
     private ASN1OctetString bp;
+
+    public DSTU4145ECBinary(DSTU4145BinaryField field, BigInteger a, byte[] b, BigInteger n, byte[] g)
+    {
+        f = field;
+        this.a = new ASN1Integer(a);
+        this.b = new DEROctetString(b);
+        this.n = new ASN1Integer(n);
+        this.bp = new DEROctetString(g);
+    }
     
     public DSTU4145ECBinary(ECDomainParameters params)
     {
