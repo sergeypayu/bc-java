@@ -20,6 +20,25 @@ public interface UAObjectIdentifiers
     static final ASN1ObjectIdentifier dstu4145le = UaOid.branch("1.3.1.1");
     /** DSTU4145 Big Endian presentation.  OID: 1.2.804.2.1.1.1.1.3.1.1.1.1 */
     static final ASN1ObjectIdentifier dstu4145be = UaOid.branch("1.3.1.1.1.1");
+
+    /** DSTU4145 With 7564 Digest Little Endian presentation.  OID: 1.2.804.2.1.1.1.1.3.6.1.1 */
+    static final ASN1ObjectIdentifier dstu4145le_7564digest_256 = UaOid.branch("1.3.6.1.1");
+    /**  DSTU4145 With 7564 Digest Big Endian presentation. OID: 1.2.804.2.1.1.1.1.3.6.1.1.1.1 */
+    static final ASN1ObjectIdentifier dstu4145be_7564digest_256 = UaOid.branch("1.3.6.1.1.1.1");
+
+    /** DSTU7564 256-bit digest presentation. OID: 1.2.804.2.1.1.1.1.2.2.1 */
+    ASN1ObjectIdentifier dstu7564digest_256 = UaOid.branch("1.2.2.1");
+    /** DSTU7564 384-bit digest presentation. OID: 1.2.804.2.1.1.1.1.2.2.2 */
+    ASN1ObjectIdentifier dstu7564digest_384 = UaOid.branch("1.2.2.2");
+    /** DSTU7564 512-bit digest presentation. OID: 1.2.804.2.1.1.1.1.2.2.3 */
+    ASN1ObjectIdentifier dstu7564digest_512 = UaOid.branch("1.2.2.3");
+
+    /** DSTU7564 256-bit mac presentation. */
+    ASN1ObjectIdentifier dstu7564mac_256 = UaOid.branch("1.2.2.4");
+    /** DSTU7564 384-bit mac presentation. */
+    ASN1ObjectIdentifier dstu7564mac_384 = UaOid.branch("1.2.2.5");
+    /** DSTU7564 512-bit mac presentation. */
+    ASN1ObjectIdentifier dstu7564mac_512 = UaOid.branch("1.2.2.6");
     
     /** Prikaz 1236 Named Curves PB.  OID: 1.2.804.2.1.1.1.1.3.1.1.2.X */
     static final ASN1ObjectIdentifier p1236namedСurvesPB = UaOid.branch("1.3.1.1.2");
@@ -53,12 +72,15 @@ public interface UAObjectIdentifiers
     static final ASN1ObjectIdentifier dhSinglePassCofactorDHGost34311kdf = UaOid.branch("1.3.4");
 	/** DH Key Agreement w/o Cofactor 1.2.804.2.1.1.1.1.3.5 */
     static final ASN1ObjectIdentifier dhSinglePassStdDHGost34311kdf = UaOid.branch("1.1.3.5");
-	
-    /** Gost34311 1.2.804.2.1.1.1.1.2.1 */
-    static final ASN1ObjectIdentifier gost34311 = UaOid.branch("1.2.1");
-    /** HMac with Gost34311 1.2.804.2.1.1.1.1.1.2 */
-    static final ASN1ObjectIdentifier hmacGost34311 = UaOid.branch("1.1.2");
-    
+
+    ASN1ObjectIdentifier alg_id = UaOid.branch("1");              /* 1.2.804.2.1.1.1.1 */
+
+    ASN1ObjectIdentifier sym_id = alg_id.branch("1");             /* 1.2.804.2.1.1.1.1.1 */
+    ASN1ObjectIdentifier hmac_gost3411_id = sym_id.branch("2");   /* 1.2.804.2.1.1.1.1.1.2 */
+
+    ASN1ObjectIdentifier hash_id = alg_id.branch("2");            /* 1.2.804.2.1.1.1.1.2 */
+    ASN1ObjectIdentifier gost3411_id = hash_id.branch("1");       /* 1.2.804.2.1.1.1.1.2.1 */
+
     /** Subject Directory Attribute: DRFO 1.2.804.2.1.1.1.11.1.4.1.1 */
     static final ASN1ObjectIdentifier drfo = UaOid.branch("11.1.4.1.1");
     /** Subject Directory Attribute: EDRPOU 1.2.804.2.1.1.1.11.1.4.2.1  */
